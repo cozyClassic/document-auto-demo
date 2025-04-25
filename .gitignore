@@ -1,0 +1,90 @@
+packages/*/package-lock.json
+sample/**/package-lock.json
+
+# dependencies
+node_modules/
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+/.devcontainer
+/.classpath
+/.project
+/.settings
+*.code-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# bundle
+packages/**/*.d.ts
+packages/**/*.js
+
+# misc
+.DS_Store
+lerna-debug.log
+npm-debug.log
+yarn-error.log
+/**/npm-debug.log
+/packages/**/.npmignore
+/packages/**/LICENSE
+*.tsbuildinfo
+
+# example
+/quick-start
+/example_dist
+/example
+
+# tests
+/test
+/benchmarks/memory
+/coverage
+/.nyc_output
+/packages/graphql
+/benchmarks/memory
+build/config\.gypi
+
+.npmrc
+pnpm-lock.yaml
+/.history
+
+
+### macOS
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+# End of https://www.toptal.com/developers/gitignore/api/macos
