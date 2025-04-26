@@ -87,4 +87,11 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+### typescript
+dist/**
+
+### db
+database.sqlite
+
 # End of https://www.toptal.com/developers/gitignore/api/macos
+

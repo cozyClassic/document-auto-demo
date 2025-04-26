@@ -1,17 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      // ----------------- 추가 start
       type: 'sqlite',
-      database: process.env.DB_PATH,
+      database: 'database.sqlite',
       autoLoadEntities: true,
       synchronize: true,
-      logging: true, // - orm 사용시 로그 남기기
-      dropSchema: true, // - 구동시 해당 테이블 삭제 synchronize와 동시 사용
-    }), // ----------------- 추가 end
+      entities: [User],
+      logging: true,
+      dropSchema: true,
+    }),
+    UsersModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
