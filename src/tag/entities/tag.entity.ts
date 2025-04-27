@@ -4,10 +4,11 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 import { Document } from '../../documents/entities/document.entity';
-
+import { UserDocumentTagStatus } from '../../user-documents/entities/user-document-tag-status.entity';
 @Entity()
 export class Tag {
   @PrimaryGeneratedColumn()
@@ -34,4 +35,10 @@ export class Tag {
   @ManyToMany(() => Document, (document) => document.tags)
   @JoinTable()
   documents: Document[];
+
+  @OneToMany(
+    () => UserDocumentTagStatus,
+    (userDocumentTagStatus) => userDocumentTagStatus.tag,
+  )
+  userDocumentTagStatuses: UserDocumentTagStatus[];
 }
