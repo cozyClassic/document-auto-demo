@@ -26,9 +26,6 @@ export class UserDocument {
   @ManyToOne(() => Document, (document) => document.userDocuments)
   document: Document;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  uploadedAt: Date;
-
   @Column({ default: 'in_progress' })
   status: string; // in_progress, completed 등
 

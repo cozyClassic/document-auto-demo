@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DocumentsModule } from './documents/documents.module';
 import { TagsModule } from './tag/tags.module';
-import { Tag } from './tag/entities/tag.entity';
+import { UserDocumentsModule } from './user-documents/user-documents.module';
 
 @Module({
   imports: [
@@ -15,13 +14,14 @@ import { Tag } from './tag/entities/tag.entity';
       database: 'database.sqlite',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, Document, Tag],
+      entities: [__dirname + '/../**/*.entity.ts}'],
       logging: true,
       dropSchema: true,
     }),
     TagsModule,
     UsersModule,
     DocumentsModule,
+    UserDocumentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
