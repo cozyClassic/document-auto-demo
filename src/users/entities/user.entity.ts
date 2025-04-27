@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { UserDocument } from 'src/user-documents/entities/user-document.entity';
+import { Role } from 'src/auth/roles.enum';
 
 @Entity()
 export class User {
@@ -15,7 +16,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: 'worker' })
+  @Column({ default: Role.Worker })
   role: string;
 
   @OneToMany(() => UserDocument, (userDocument) => userDocument.user)

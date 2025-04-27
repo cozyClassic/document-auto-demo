@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/rolese.guard';
 import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @Controller('users')
 export class UsersController {
@@ -16,7 +17,7 @@ export class UsersController {
 
   @Get('/workers/')
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles(Role.Admin)
   async getFindAllWorkers() {
     return this.userService.findAllWorkers();
   }

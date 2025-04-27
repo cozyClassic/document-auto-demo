@@ -3,6 +3,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Role } from 'src/auth/roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,7 @@ export class UsersService {
 
   findAllWorkers(): Promise<User[]> {
     return this.userRepository.findBy({
-      role: 'worker',
+      role: Role.Worker,
     });
   }
 
