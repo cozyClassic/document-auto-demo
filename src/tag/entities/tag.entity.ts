@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+
+import { Document } from '../../documents/entities/document.entity';
 
 @Entity()
 export class Tag {
@@ -22,4 +30,8 @@ export class Tag {
 
   @Column()
   isActive: boolean;
+
+  @ManyToMany(() => Document, (document) => document.tags)
+  @JoinTable()
+  documents: Document[];
 }
