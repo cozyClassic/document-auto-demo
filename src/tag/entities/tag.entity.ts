@@ -3,7 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToMany,
-  JoinTable,
   OneToMany,
 } from 'typeorm';
 
@@ -33,7 +32,6 @@ export class Tag {
   isActive: boolean;
 
   @ManyToMany(() => Document, (document) => document.tags)
-  @JoinTable()
   documents: Document[];
 
   @OneToMany(

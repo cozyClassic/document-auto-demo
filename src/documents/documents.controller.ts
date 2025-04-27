@@ -14,7 +14,7 @@ import { Role } from 'src/auth/roles.enum';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/rolese.guard';
 
-@Controller('document')
+@Controller('documents')
 @UseGuards(AuthGuard, RolesGuard)
 @Roles(Role.Admin)
 export class DocumentsController {

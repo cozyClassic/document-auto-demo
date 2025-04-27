@@ -15,7 +15,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    const payload = { email: user.email, id: user.id, role: user.role };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {

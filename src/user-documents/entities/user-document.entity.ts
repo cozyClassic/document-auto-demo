@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Document } from '../../documents/entities/document.entity';
@@ -15,15 +16,23 @@ export class UserDocument {
   id: number;
 
   @Column()
-  fildPath: string;
+  filePath: string;
 
   @Column()
   fileContentType: string;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(() => User, (user) => user.userDocuments)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
+  @Column()
+  documentId: number;
+
   @ManyToOne(() => Document, (document) => document.userDocuments)
+  @JoinColumn({ name: 'documentId' })
   document: Document;
 
   @Column({ default: 'in_progress' })

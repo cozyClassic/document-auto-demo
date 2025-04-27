@@ -4,6 +4,8 @@ import { Tag } from 'src/tag/entities/tag.entity';
 import { Document } from 'src/documents/entities/document.entity';
 import { UserDocumentTagStatus } from 'src/user-documents/entities/user-document-tag-status.entity';
 import { UserDocument } from './entities/user-document.entity';
+import { UserDocumentsController } from './user-documents.controller';
+import { UserDocumentsService } from './user-documents.service';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { UserDocument } from './entities/user-document.entity';
       UserDocumentTagStatus,
     ]),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [UserDocumentsController],
+  providers: [UserDocumentsService],
 })
 export class UserDocumentsModule {}

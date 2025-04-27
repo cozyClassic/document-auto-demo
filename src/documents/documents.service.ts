@@ -16,7 +16,9 @@ export class DocumentsService {
   ) {}
 
   findAll(): Promise<Document[]> {
-    return this.documentRepository.find();
+    return this.documentRepository.find({
+      relations: ['tags'],
+    });
   }
 
   save(Document: CreateDocumentDto): Promise<Document> {
@@ -47,6 +49,6 @@ export class DocumentsService {
 
     document.tags = tagIds.map((tagId) => ({ id: tagId }) as any);
 
-    return this.documentRepository.save(document);
+    return await this.documentRepository.save(document);
   }
 }

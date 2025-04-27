@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 import { UserDocument } from './entities/user-document.entity';
 import { UserDocumentTagStatus } from './entities/user-document-tag-status.entity';
 import { CreateUserDocumentDto } from './dto/create-user-document.dto';
-import { UserDocumentTagStatusCreateInput } from './interfaces/user-document-tag-status.interface';
 
 @Injectable()
-export class UserDocumentService {
+export class UserDocumentsService {
   constructor(
     @InjectRepository(UserDocument)
     private userDocumentRepository: Repository<UserDocument>,
@@ -30,25 +29,30 @@ export class UserDocumentService {
         UserDocumentTagStatus,
       );
 
+      // 1. UserDocument 저장
       const savedUserDocuments = await userDocumentRepo.save(documents);
+      const savedIds = savedUserDocuments.map((doc) => doc.id);
+
+      // 2. 저장된 UserDocument를 관계(document.tags 포함)까지 조회
+      const userDocuments = await userDocumentRepo.find({
+        where: { id: In(savedIds) },
+        relations: { document: { tags: true } },
+      });
 
       // 상위테이블 documents와 연결되어 있는 tag 각각에 대하여
       // document별로 모든 user-documents-tag-status를 생성한다.
-      const userDocumentTagStatusList: UserDocumentTagStatusCreateInput[] = [];
 
-      for (const userDocument of savedUserDocuments) {
-        if (userDocument.document?.tags?.length) {
-          const tagStatuses = userDocument.document.tags.map((tag) => ({
-            documentId: userDocument.id,
-            tagId: tag.id,
+      // 3. UserDocumentTagStatus 리스트 생성
+      const userDocumentTagStatusList = userDocuments.flatMap(
+        ({ id: documentId, document }) =>
+          (document?.tags || []).map(({ id: tagId }) => ({
+            userDocument: { id: documentId },
+            tag: { id: tagId },
             status: 'pending',
-          }));
+          })),
+      );
 
-          userDocumentTagStatusList.push(...tagStatuses);
-        }
-      }
-
-      // Save tag statuses within the same transaction
+      // 4. UserDocumentTagStatus 저장
       if (userDocumentTagStatusList.length > 0) {
         await tagStatusRepo.save(userDocumentTagStatusList);
       }
@@ -91,5 +95,18 @@ export class UserDocumentService {
     } else {
       throw new Error('Tag status not found');
     }
+  }
+
+  async findAllUserDocuments(userId: number): Promise<UserDocument[]> {
+    return this.userDocumentRepository.find({
+      where: { user: { id: userId } },
+      relations: ['document', 'tagStatuses'],
+    });
+  }
+
+  async findAll(): Promise<UserDocument[]> {
+    return this.userDocumentRepository.find({
+      relations: ['document', 'tagStatuses'],
+    });
   }
 }
