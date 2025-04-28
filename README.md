@@ -1,5 +1,9 @@
 # 단계별 문서처리 프로그램 demo
 
+## FLOW chart
+![image](https://github.com/user-attachments/assets/6e4c45e4-1e7c-470d-9dcd-1de635a19582)
+
+
 ## 기능 개요 (Scenario)
 
 1. 관리자는 서류 유형을 생성.
