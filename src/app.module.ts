@@ -7,6 +7,9 @@ import { DocumentsModule } from './documents/documents.module';
 import { TagsModule } from './tag/tags.module';
 import { UserDocumentsModule } from './user-documents/user-documents.module';
 import { AuthModule } from './auth/auth.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronModule } from './cron/cron.module';
+import { ExternalRequestModule } from './external-requests/external-requests.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { AuthModule } from './auth/auth.module';
     DocumentsModule,
     UserDocumentsModule,
     AuthModule,
+    ScheduleModule.forRoot(),
+    ExternalRequestModule,
+    CronModule,
   ],
   controllers: [AppController],
   providers: [AppService],

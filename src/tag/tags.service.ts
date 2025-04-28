@@ -23,6 +23,12 @@ export class TagsService {
     return this.tagRepository.findBy({ id: In(ids) });
   }
 
+  findTagsForCron(): Promise<Tag[]> {
+    return this.tagRepository.find({
+      where: { isActive: true, isInstant: false },
+    });
+  }
+
   save(tag: CreateTagDto): Promise<Tag> {
     return this.tagRepository.save(tag);
   }

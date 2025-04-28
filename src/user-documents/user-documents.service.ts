@@ -109,4 +109,11 @@ export class UserDocumentsService {
       relations: ['document', 'tagStatuses'],
     });
   }
+
+  async findPendingByTagId(tagId: number): Promise<UserDocumentTagStatus[]> {
+    return this.userDocumentTagStatusRepository.find({
+      where: { tag: { id: tagId }, status: 'pending' },
+      relations: ['userDocument', 'userDocument.document'],
+    });
+  }
 }
