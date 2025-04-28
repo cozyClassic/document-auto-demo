@@ -4,6 +4,8 @@ import { Repository, DataSource, In } from 'typeorm';
 import { UserDocument } from './entities/user-document.entity';
 import { UserDocumentTagStatus } from './entities/user-document-tag-status.entity';
 import { CreateUserDocumentDto } from './dto/create-user-document.dto';
+import { TagsService } from 'src/tag/tags.service';
+import { ExternalRequestService } from 'src/external-requests/external-requests.service';
 
 @Injectable()
 export class UserDocumentsService {
@@ -14,6 +16,9 @@ export class UserDocumentsService {
     @InjectRepository(UserDocumentTagStatus)
     private userDocumentTagStatusRepository: Repository<UserDocumentTagStatus>,
     private dataSource: DataSource,
+    private readonly tagsService: TagsService,
+
+    private readonly externalRequestService: ExternalRequestService,
   ) {}
 
   async saveUserDocuments(documents: CreateUserDocumentDto[]): Promise<void> {
@@ -43,10 +48,10 @@ export class UserDocumentsService {
       // document별로 모든 user-documents-tag-status를 생성한다.
 
       // 3. UserDocumentTagStatus 리스트 생성
-      const userDocumentTagStatusList = userDocuments.flatMap(
-        ({ id: documentId, document }) =>
+      let userDocumentTagStatusList = userDocuments.flatMap(
+        ({ id: documentId, document, filePath }) =>
           (document?.tags || []).map(({ id: tagId }) => ({
-            userDocument: { id: documentId },
+            userDocument: { id: documentId, filePath },
             tag: { id: tagId },
             status: 'pending',
           })),
@@ -54,7 +59,35 @@ export class UserDocumentsService {
 
       // 4. UserDocumentTagStatus 저장
       if (userDocumentTagStatusList.length > 0) {
-        await tagStatusRepo.save(userDocumentTagStatusList);
+        userDocumentTagStatusList = await tagStatusRepo.save(
+          userDocumentTagStatusList,
+        );
+      }
+
+      // isInstant = true인 tag를 달고있는 userDocumentTagStatus에 대해서는
+      // 즉시 요청을 보낸다.
+      const instantTagMap = (await this.tagsService.findInstantTags()).reduce(
+        (acc, tag) => {
+          acc[tag.id] = true;
+          return acc;
+        },
+        {} as Record<string, true>,
+      );
+
+      for (const userDocumentTagStatus of userDocumentTagStatusList) {
+        if (userDocumentTagStatus.tag.id in instantTagMap) {
+          if ('id' in userDocumentTagStatus) {
+            await this.externalRequestService.requestToExternalServer(
+              userDocumentTagStatus.tag.id,
+              {
+                tagStatusId: userDocumentTagStatus.id,
+                userDocumentId: userDocumentTagStatus.userDocument.id,
+                userDocumentFilePath:
+                  userDocumentTagStatus.userDocument.filePath,
+              },
+            );
+          }
+        }
       }
 
       // If everything succeeds, commit the transaction

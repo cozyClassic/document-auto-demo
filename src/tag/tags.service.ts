@@ -29,6 +29,12 @@ export class TagsService {
     });
   }
 
+  async findInstantTags(): Promise<Tag[]> {
+    return this.tagRepository.find({
+      where: { isActive: true, isInstant: true },
+    });
+  }
+
   save(tag: CreateTagDto): Promise<Tag> {
     return this.tagRepository.save(tag);
   }
