@@ -12,5 +12,6 @@ import { ExternalRequestService } from './external-requests.service';
     }),
   ],
   providers: [ExternalRequestService],
+  exports: [ExternalRequestService],
 })
 export class ExternalRequestModule {}

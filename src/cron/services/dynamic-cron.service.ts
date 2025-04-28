@@ -11,7 +11,6 @@ export class DynamicCronService implements OnModuleInit {
   constructor(
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly externalRequestService: ExternalRequestService,
-
     private readonly tagsService: TagsService,
     private readonly userDocumentsSevice: UserDocumentsService,
   ) {}

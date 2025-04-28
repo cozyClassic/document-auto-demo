@@ -18,5 +18,6 @@ import { UserDocumentsService } from './user-documents.service';
   ],
   controllers: [UserDocumentsController],
   providers: [UserDocumentsService],
+  exports: [UserDocumentsService],
 })
 export class UserDocumentsModule {}
