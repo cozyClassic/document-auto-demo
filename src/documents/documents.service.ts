@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Document } from './entities/document.entity';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDocumentDto } from './dto/create-document.dto';
-import { Tag } from 'src/tag/entities/tag.entity';
+import { TagsService } from 'src/tag/tags.service';
 
 @Injectable()
 export class DocumentsService {
@@ -11,8 +11,7 @@ export class DocumentsService {
     @InjectRepository(Document)
     private documentRepository: Repository<Document>,
 
-    @InjectRepository(Tag)
-    private tagRepository: Repository<Tag>,
+    private readonly tagsService: TagsService,
   ) {}
 
   findAll(): Promise<Document[]> {
@@ -39,9 +38,7 @@ export class DocumentsService {
     }
 
     // check if the tags exist
-    const tags = await this.tagRepository.findBy({
-      id: In(tagIds),
-    });
+    const tags = await this.tagsService.findByInIds(tagIds);
     if (tags.length !== tagIds.length) {
       throw new Error('Some tags not found');
     }

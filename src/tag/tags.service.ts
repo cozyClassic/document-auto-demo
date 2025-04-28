@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Tag } from './entities/tag.entity';
 import { CreateTagDto } from './dto/create-tag.dto';
 
@@ -17,6 +17,10 @@ export class TagsService {
 
   findOne(id: number): Promise<Tag> {
     return this.tagRepository.findOneBy({ id });
+  }
+
+  findByInIds(ids: number[]): Promise<Tag[]> {
+    return this.tagRepository.findBy({ id: In(ids) });
   }
 
   save(tag: CreateTagDto): Promise<Tag> {

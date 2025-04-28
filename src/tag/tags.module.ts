@@ -10,5 +10,6 @@ import { UserDocumentTagStatus } from 'src/user-documents/entities/user-document
   imports: [TypeOrmModule.forFeature([Tag, Document, UserDocumentTagStatus])],
   controllers: [TagsController],
   providers: [TagsService],
+  exports: [TagsService, TypeOrmModule],
 })
 export class TagsModule {}
