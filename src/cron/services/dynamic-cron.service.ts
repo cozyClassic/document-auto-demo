@@ -57,4 +57,16 @@ export class DynamicCronService implements OnModuleInit {
   removeCronJob(tagId: number) {
     this.schedulerRegistry.deleteCronJob(`tag-cron-${tagId}`);
   }
+
+  async runInstantJob(
+    tagId: number,
+    userDocumentTagStatus: UserDocumentTagStatus,
+    filePath: string,
+  ) {
+    await this.externalRequestService.requestToExternalServer(tagId, {
+      tagStatusId: userDocumentTagStatus.id,
+      userDocumentId: userDocumentTagStatus.userDocumentId,
+      userDocumentFilePath: filePath,
+    });
+  }
 }
